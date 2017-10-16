@@ -158,7 +158,7 @@ Startup info
 	else:
 		# no cleanup
 		#sys.stdout.flush() # flush buffer before executing next line
-		#os.system("rm -rf "+staging_dir)
+		#os.system("rm -rf '"+staging_dir+"'")
 		#os.mkdir(staging_dir)
 		pass
 
@@ -179,7 +179,7 @@ Startup info
 	else:
 		# no cleanup
 		#sys.stdout.flush() # flush buffer before executing next line
-		#os.system("rm -rf "+archive_dir)
+		#os.system("rm -rf '"+archive_dir+"'")
 		#os.mkdir(archive_dir)
 		pass
 		
@@ -200,7 +200,7 @@ Startup info
 	else:
 		# no cleanup
 		#sys.stdout.flush() # flush buffer before executing next line
-		#os.system("rm -rf "+export_dir)
+		#os.system("rm -rf '"+export_dir+"'")
 		#os.mkdir(export_dir)
 		pass
 
@@ -273,7 +273,7 @@ Startup info
 	
 		# cleanup folder before extract
 		sys.stdout.flush() # flush buffer before executing next line
-		os.system("rm -rf "+file_inputzip_staging_dir) 		
+		os.system("rm -rf '"+file_inputzip_staging_dir+"'")
 		
 		exec_str = "%s x -y -bb -o\"%s\" \"%s\"" % (
 			path_7z, file_inputzip_staging_dir, file_inputzip_staging)
@@ -628,7 +628,7 @@ SET tx_isolation = 'READ-COMMITTED'; CALL load_data_%s_%s_%s();" % (curr_tech_lo
 		print "[%s] Cleaning up output files...\n" % (
 			time.strftime("%Y-%m-%d %H:%M:%S"))  		
 		sys.stdout.flush() # flush buffer before executing next line
-		os.system("rm -rf "+file_inputzip_staging_dir)
+		os.system("rm -rf '"+file_inputzip_staging_dir+"'")
 
 	# end of for file_inputzip in glob.glob(result_dir + "/*.zip"):
 
@@ -703,7 +703,7 @@ def cleanupAndExit(errcode, work_location):
 	print "[%s] Cleaning up output files...\n" % (
 		time.strftime("%Y-%m-%d %H:%M:%S"))  		
 	sys.stdout.flush() # flush buffer before executing next line
-	os.system("rm -rf "+work_location['inputfile_dir'])
+	os.system("rm -rf '"+work_location['inputfile_dir']+"'")
 	
 	print "[%s] Process completed with error code %d.\n" % (
 		time.strftime("%Y-%m-%d %H:%M:%S"), errcode)

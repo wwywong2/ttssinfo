@@ -265,14 +265,14 @@ def main(path, lZone, module):
                                 tFile = os.path.join( dirName, string.replace(f, mktName, marketAbbr) )
                                 #print( 'LINE tFile -- [{}] - [{}]'.format( mktName, tFile ) )
                                 if utilities.fileExist( tFile ):
-                                    print( 
-                                    #cmd = ( 
+                                    #print( 
+                                    cmd = ( 
                                     'awk \'FNR > 1\' {} >> {}'.format( os.path.join(dirName, f), tFile ) )
                                 else:
-                                    print( 
-                                    #cmd = ( 
+                                    #print( 
+                                    cmd = ( 
                                     'cat {} > {}'.format( os.path.join(dirName, f), tFile ) )
-                                #ret = utilities.subprocessShellExecute( cmd )
+                                ret = utilities.subprocessShellExecute( cmd )
             
         if depth == 3:
             region = myArr[ len(myArr) - 1 ]
