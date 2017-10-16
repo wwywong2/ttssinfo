@@ -265,14 +265,14 @@ def main(path, lZone, module):
                                 tFile = os.path.join( dirName, string.replace(f, mktName, marketAbbr) )
                                 #print( 'LINE tFile -- [{}] - [{}]'.format( mktName, tFile ) )
                                 if utilities.fileExist( tFile ):
-                                    #print( 
-                                    cmd = ( 
+                                    print( 
+                                    #cmd = ( 
                                     'awk \'FNR > 1\' {} >> {}'.format( os.path.join(dirName, f), tFile ) )
                                 else:
-                                    #print( 
-                                    cmd = ( 
+                                    print( 
+                                    #cmd = ( 
                                     'cat {} > {}'.format( os.path.join(dirName, f), tFile ) )
-                                ret = utilities.subprocessShellExecute( cmd )
+                                #ret = utilities.subprocessShellExecute( cmd )
             
         if depth == 3:
             region = myArr[ len(myArr) - 1 ]
@@ -306,24 +306,24 @@ def main(path, lZone, module):
                     except OSError:
                         dummy = 1
                         
-                    #print ( 'LINE Copy subdir -- ' + 
-                    cmd = (
+                    print ( 'LINE Copy subdir -- ' + 
+                    #cmd = (
                     'cp -p -r {} {}'\
                         .format( os.path.join(dirName, subdir, '*'), os.path.join(combinedMktPath, vendor, market+'-'+subdir) ) )
-                    ret = utilities.subprocessShellExecute( cmd )
+                    #ret = utilities.subprocessShellExecute( cmd )
                 
-                #print ( 'LINE Remove folder -- ' + 
-                cmd = (
+                print ( 'LINE Remove folder -- ' + 
+                #cmd = (
                 'rm -rf {}'\
                     .format( os.path.join(regionPath, market) ) )
-                ret = utilities.subprocessShellExecute( cmd )
+                #ret = utilities.subprocessShellExecute( cmd )
                 #break
             
-            #print ( 'LINE Copy templates -- ' + 
-            cmd = (
+            print ( 'LINE Copy templates -- ' + 
+            #cmd = (
             'cp -p -r {} {}'\
                 .format( os.path.join(curr_py_dir, 'TEMPLATE_' + tech + '_' + vendor), os.path.join(combinedMktPath, vendor) ) )
-            ret = utilities.subprocessShellExecute( cmd )
+            #ret = utilities.subprocessShellExecute( cmd )
             '''
             '''
 
@@ -337,118 +337,134 @@ def main(path, lZone, module):
         #break
         
         if depth == 1:
+            if module != '':
+                if myArr[ len(myArr) - 1 ] == module:
+                    resumeLoop = True
+                else:
+                    resumeLoop = False
+            else:
+                resumeLoop = True
+                    
             if (len(myArr[ len(myArr) - 1 ].split('-')) > 1):
                 tech = myArr[ len(myArr) - 1 ].split('-')[1]
             else:
                 tech = myArr[ len(myArr) - 1 ]
             #mktCnt = 1
                 
-        '''
-        if depth == 2:
-            # RAWFILES & SITEFILES & TEMPLATE folders
-        '''
-            
-        if depth == 3:
-            region = myArr[ len(myArr) - 1 ]
-            
-        if depth == 4:
-            market = myArr[ len(myArr) - 1 ]
-            
-            try:
-                marketAbbr = mAbbrFile.get( 'DEFAULT', market )
-                if string.find( marketAbbr, ':' ) > -1:
-                    marketAbbr = marketAbbr[:string.find(marketAbbr, ':')]
-            except (ConfigParser.NoOptionError):
-                marketAbbr = market
-            
-            if mktCnt != 1:
-                cfgParser.write( cfgFile )
-                cfgFile.close()
-                ziph.write( os.path.join(path, 'Market.ini'), 'Market.ini' )
-                ziph.close()
-                
-            #cfgFile = open(path + os.path.sep + 'Market' + str(mktCnt) + '.ini', 'w')
-            cfgFile = open(os.path.join(path, 'Market.ini'), 'w')
-            mktCnt += 1
-            
-            cfgParser = ConfigParser.ConfigParser()
-            # The following will tell cfgParserParser to keep case-sensitive names
-            cfgParser.optionxform = str
-
-            print( 'Found directory: %s %s' % (tech + '-' + region + '-' + market + '-' + myArr[ len(myArr) - 1 ], str(depth)) )
-            #print( str( datetime.datetime.today() ) + ' ' + str( datetime.datetime.now().time() ) )
-            try:
-                # add the settings to the structure of the file, and lets write it out...
-                # Note to self: for DEFAULT section name, no need to add the section, it is by default there
-                cfgParser.set( 'DEFAULT', 'Num', 0 )
-                cfgParser.set( 'DEFAULT', "Count", 0 )
-                cfgParser.set( 'DEFAULT', 'Tech', '' )
-                cfgParser.set( 'DEFAULT', 'Region', '' )
-                cfgParser.set( 'DEFAULT', 'Market', '' )
-                cfgParser.set( 'DEFAULT', 'VendorCount', 0 )
-                cfgParser.set( 'DEFAULT', 'VendorN', '' )
-                
-                cfgParser.add_section( 'main' )
-                cfgParser.set( 'main', 'Company', 'TMO' )
-                cfgParser.set( 'main', 'Tech', tech )
-                cfgParser.set( 'main', 'Region', region )
-                cfgParser.set( 'main', 'Market', market )
-                cfgParser.set( 'main', 'VendorCount', '' )
-            except (ConfigParser.DuplicateSectionError):
-                dummy = 1
-            
-            i = 0
-            for myDir in subdirList:
-                i+=1
-                vendor = myDir
-                try:
-                    cfgParser.add_section( 'checklist_' + vendor )
-                    cfgParser.add_section( 'bypasslist_' + vendor )
-                    cfgParser.add_section( 'filelist_' + vendor )
-                    cfgParser.add_section( 'bsc_' + vendor )
-                except (ConfigParser.DuplicateSectionError):
-                    dummy = 1
-                
-                cfgParser.set( 'bsc_' + vendor, 'Num', '' )
-                cfgParser.set( 'main', 'Vendor' + str(i), myDir )
-                setStaticInfo( cfgParser, tech, vendor )    # Call a method to set static info for the config file
-            cfgParser.set( 'main', 'VendorCount', str(i) )
-            ziph = zipfile.ZipFile( os.path.join((lZone if lZone != '' else path), tech + 'SINFO_' + ('MULTIVENDOR' if i>1 else vendor) + '_' + re.sub( '[-]', '', str( datetime.datetime.today() )[:10] ) + '_' + re.sub( '[:.]', '', str( datetime.datetime.now().time() )[:12] ) + '_TMO-' + marketAbbr + '_Result.zip'), 'w', zipfile.ZIP_DEFLATED )
-            
-            for dirs, subdirs, files in os.walk( string.replace( dirName[:string.find( dirName, region )], 'RAWFILES', 'SITEFILES' ) ):
-                for f in files:
-                    # Getting the right Site/Atoll file for the market
-                    if string.find( f, '-' + string.replace(market, '.', '') + '.csv' ) > -1:
-                        fileNm = string.upper( string.replace( f, '-' + string.replace(market, '.', ''), '' ) )
-                        fileNm = fileNm[:string.find(fileNm, '.')] + string.lower( fileNm[string.find(fileNm, '.'):] )
-                        print( 'LINE Site file: ' + os.path.join(dirs, f + ' - [' + fileNm + ']') )
-                        ziph.write( os.path.join(dirs, f), fileNm )
-            '''            
-            for dirs, subdirs, files in os.walk( path + os.path.sep + 'TOKENs' ):
-                for f in files:
-                    # Getting the right Token file for the market
-                    if string.find( f, market + '_' + tech + 'SINFO_Token.txt' ) > -1:
-                        ziph.write( dirs + os.path.sep + f, 'Token.txt' )  #NEED TO BE CHANGED
-                        print( 'LINE 257: ' + dirs + os.path.sep + f )
-            '''
-            tokenFile = os.path.join(path, '..', '..', marketAbbr + '_' + tech + 'SINFO_Token.txt')
-            if os.path.exists( tokenFile ):
-                ziph.write( tokenFile, 'Token.txt' )
+        try:
+            if not resumeLoop:
+                print( 'LINE GOT HERE False [{}]'.format(myArr[ len(myArr) - 1 ]) )
+                continue
             else:
-                tokenFile = os.path.join(path, 'TOKENs', market + '_' + tech + 'SINFO_Token.txt')
-                if os.path.exists( tokenFile ):
-                    ziph.write( tokenFile, 'Token.txt' )
-            
-        if depth == 5:
-            i = 0
-            for myDir in subdirList:
-                i+=1
-                cfgParser.set( 'bsc_' + myArr[ len(myArr) - 1 ], 'bsc' + str(i), myDir )
-            cfgParser.set( 'bsc_' + myArr[ len(myArr) - 1 ], 'Num', str(i) )
-            
-        if depth == 6:
-            for fname in fileList:
-                ziph.write( os.path.join( dirName, fname ), os.path.join( myArr[ len(myArr) - 4 ], myArr[ len(myArr) - 3 ], myArr[ len(myArr) - 2 ], myArr[ len(myArr) - 1 ], fname ) )
+                '''
+                if depth == 2:
+                    # RAWFILES & SITEFILES & TEMPLATE folders
+                '''
+                    
+                if depth == 3 and resumeLoop:
+                    region = myArr[ len(myArr) - 1 ]
+                    
+                if depth == 4 and resumeLoop:
+                    market = myArr[ len(myArr) - 1 ]
+                    
+                    try:
+                        marketAbbr = mAbbrFile.get( 'DEFAULT', market )
+                        if string.find( marketAbbr, ':' ) > -1:
+                            marketAbbr = marketAbbr[:string.find(marketAbbr, ':')]
+                    except (ConfigParser.NoOptionError):
+                        marketAbbr = market
+                    
+                    if mktCnt != 1:
+                        cfgParser.write( cfgFile )
+                        cfgFile.close()
+                        ziph.write( os.path.join(path, 'Market.ini'), 'Market.ini' )
+                        ziph.close()
+                        
+                    #cfgFile = open(path + os.path.sep + 'Market' + str(mktCnt) + '.ini', 'w')
+                    cfgFile = open(os.path.join(path, 'Market.ini'), 'w')
+                    mktCnt += 1
+                    
+                    cfgParser = ConfigParser.ConfigParser()
+                    # The following will tell cfgParserParser to keep case-sensitive names
+                    cfgParser.optionxform = str
+
+                    print( 'Found directory: %s %s' % (tech + '-' + region + '-' + market + '-' + myArr[ len(myArr) - 1 ], str(depth)) )
+                    #print( str( datetime.datetime.today() ) + ' ' + str( datetime.datetime.now().time() ) )
+                    try:
+                        # add the settings to the structure of the file, and lets write it out...
+                        # Note to self: for DEFAULT section name, no need to add the section, it is by default there
+                        cfgParser.set( 'DEFAULT', 'Num', 0 )
+                        cfgParser.set( 'DEFAULT', "Count", 0 )
+                        cfgParser.set( 'DEFAULT', 'Tech', '' )
+                        cfgParser.set( 'DEFAULT', 'Region', '' )
+                        cfgParser.set( 'DEFAULT', 'Market', '' )
+                        cfgParser.set( 'DEFAULT', 'VendorCount', 0 )
+                        cfgParser.set( 'DEFAULT', 'VendorN', '' )
+                        
+                        cfgParser.add_section( 'main' )
+                        cfgParser.set( 'main', 'Company', 'TMO' )
+                        cfgParser.set( 'main', 'Tech', tech )
+                        cfgParser.set( 'main', 'Region', region )
+                        cfgParser.set( 'main', 'Market', market )
+                        cfgParser.set( 'main', 'VendorCount', '' )
+                    except (ConfigParser.DuplicateSectionError):
+                        dummy = 1
+                    
+                    i = 0
+                    for myDir in subdirList:
+                        i+=1
+                        vendor = myDir
+                        try:
+                            cfgParser.add_section( 'checklist_' + vendor )
+                            cfgParser.add_section( 'bypasslist_' + vendor )
+                            cfgParser.add_section( 'filelist_' + vendor )
+                            cfgParser.add_section( 'bsc_' + vendor )
+                        except (ConfigParser.DuplicateSectionError):
+                            dummy = 1
+                        
+                        cfgParser.set( 'bsc_' + vendor, 'Num', '' )
+                        cfgParser.set( 'main', 'Vendor' + str(i), myDir )
+                        setStaticInfo( cfgParser, tech, vendor )    # Call a method to set static info for the config file
+                    cfgParser.set( 'main', 'VendorCount', str(i) )
+                    ziph = zipfile.ZipFile( os.path.join((lZone if lZone != '' else path), tech + 'SINFO_' + ('MULTIVENDOR' if i>1 else vendor) + '_' + re.sub( '[-]', '', str( datetime.datetime.today() )[:10] ) + '_' + re.sub( '[:.]', '', str( datetime.datetime.now().time() )[:12] ) + '_TMO-' + marketAbbr + '_Result.zip'), 'w', zipfile.ZIP_DEFLATED )
+                    
+                    for dirs, subdirs, files in os.walk( string.replace( dirName[:string.find( dirName, region )], 'RAWFILES', 'SITEFILES' ) ):
+                        for f in files:
+                            # Getting the right Site/Atoll file for the market
+                            if string.find( f, '-' + string.replace(market, '.', '') + '.csv' ) > -1:
+                                fileNm = string.upper( string.replace( f, '-' + string.replace(market, '.', ''), '' ) )
+                                fileNm = fileNm[:string.find(fileNm, '.')] + string.lower( fileNm[string.find(fileNm, '.'):] )
+                                print( 'LINE Site file: ' + os.path.join(dirs, f + ' - [' + fileNm + ']') )
+                                ziph.write( os.path.join(dirs, f), fileNm )
+                    '''            
+                    for dirs, subdirs, files in os.walk( path + os.path.sep + 'TOKENs' ):
+                        for f in files:
+                            # Getting the right Token file for the market
+                            if string.find( f, market + '_' + tech + 'SINFO_Token.txt' ) > -1:
+                                ziph.write( dirs + os.path.sep + f, 'Token.txt' )  #NEED TO BE CHANGED
+                                print( 'LINE 257: ' + dirs + os.path.sep + f )
+                    '''
+                    tokenFile = os.path.join(path, '..', '..', marketAbbr + '_' + tech + 'SINFO_Token.txt')
+                    if os.path.exists( tokenFile ):
+                        ziph.write( tokenFile, 'Token.txt' )
+                    else:
+                        tokenFile = os.path.join(path, 'TOKENs', market + '_' + tech + 'SINFO_Token.txt')
+                        if os.path.exists( tokenFile ):
+                            ziph.write( tokenFile, 'Token.txt' )
+                    
+                if depth == 5 and resumeLoop:
+                    i = 0
+                    for myDir in subdirList:
+                        i+=1
+                        cfgParser.set( 'bsc_' + myArr[ len(myArr) - 1 ], 'bsc' + str(i), myDir )
+                    cfgParser.set( 'bsc_' + myArr[ len(myArr) - 1 ], 'Num', str(i) )
+                    
+                if depth == 6 and resumeLoop:
+                    for fname in fileList:
+                        ziph.write( os.path.join( dirName, fname ), os.path.join( myArr[ len(myArr) - 4 ], myArr[ len(myArr) - 3 ], myArr[ len(myArr) - 2 ], myArr[ len(myArr) - 1 ], fname ) )
+        except NameError:
+            dummy = 1
+        
     
     try:
         cfgFile
@@ -470,6 +486,6 @@ def main(path, lZone, module):
 if __name__ == "__main__":
     path = sys.argv[1] if len(sys.argv) > 1 else '.'
     outPath = sys.argv[2] if len(sys.argv) > 2 else path
-    module = sys.argv[3] if len(sys.argv) > 3 else ''
+    module = sys.argv[3] if len(sys.argv) > 3 else 'SINFO'
     ret = main(path, outPath, module)
     print ret

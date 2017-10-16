@@ -354,4 +354,11 @@ def checkRemoteDirExist(serverAddr, serverUsr, serverPwd, remoteDir, createIfNot
     retObj['cmd_test_remote_dir'] = cmd
     return retObj
 
+def touch(fname, times=None):
+    import os
+    fhandle = open(fname, 'a')
+    try:
+        os.utime(fname, times)
+    finally:
+        fhandle.close()
 
