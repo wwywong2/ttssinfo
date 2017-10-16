@@ -1,0 +1,86 @@
+[DEFAULT]
+;
+; Below is a list of markets with their initials mapping, it also shows how markets are getting combined in the final output
+;
+; Special characters used in this configuration file (the ORDER matters):
+;       ':' -- Colon is used to copy/append ONLY the switch data, the end-result: source market is kept intact
+;           e.g. ':TKY' means ONLY the switch data will be copied to the TKY market
+;
+;       '|' -- Pipe is used to move/append both switch & site, identified as combined markets,
+;              the end-result: source markets will be removed after the combine
+;           e.g. 'TKY|1' means both switch & site will be moved/appended to the TKY market
+;
+;       The numeric value after pipe ('|') is only used for display purposes, no associated programming logic coded
+;       For combined markets, the resulting market initial needs to be added to allow it to be mapped to itself
+;
+; =============================ERICSSON MARKETS================================
+ALBUQUERQUE = AEP|1
+EL_PASO = AEP|2
+AEP = AEP
+CAROLINA = CR
+CONNECTICUT = CT
+HAWAII = HI
+LAS_VEGAS = VG
+LOS_ANGELES = LAA
+NEW_ENGLAND = NE
+NEW_YORK = NYC
+PHILADELPHIA = PEN|1
+CENTRAL_PA = PEN|2
+PEN = PEN
+SACRAMENTO = SC
+SALT_LAKE_CITY = UT
+SAN_DIEGO = SD
+SAN_FRANCISCO = SF
+UPSTATE_NY = UP
+VIRGINIA = VA
+WASHINGTON_DC = DC
+; =============================NOKIA MARKETS================================
+ATLANTA = AT
+AUSTIN = AU
+BIRMINGHAM = BHM|1
+MEMPHIS = BHM|2
+BHM = BHM
+CHICAGO = CHI|1
+MILWAUKEE = CHI|2
+CHI = CHI
+CINCINNATI = CI
+CLEVELAND = POH|1
+COLUMBUS = POH|2
+PITTSBURGH = POH|3
+WEST_VIRGINIA = POH|4
+POH = POH
+DAKOTAS = MIN|1
+DES_MOINES = MIN|2
+MINNEAPOLIS = MIN|3
+OMAHA = MIN|4
+MIN = MIN
+DALLAS = DA
+DENVER = DN
+DETROIT = DE
+HOUSTON = HN
+INDIANAPOLIS = IN
+JACKSONVILLE = JV
+KANSAS_CITY = KCW|1
+ARKANSAS = KCW|2
+WICHITA = KCW|3
+KCW = KCW
+KNOXVILLE = TKY|1
+LOUISVILLE = TKY|2
+TKY = TKY
+MIAMI = FL
+MOBILE = MON
+MONTANA = MT
+NASHVILLE = NA:TKY
+OKLAHOMA_CITY = OKT|1
+TULSA = OKT|2
+OKT = OKT
+ORLANDO = NFL|1
+TAMPA = NFL|2
+NFL = NFL
+PHOENIX = PX
+PORTLAND = PTS|1
+SPOKANE = PTS|2
+PTS = PTS
+PUERTO_RICO = PR
+SEATTLE = SE
+ST._LOUIS = SL
