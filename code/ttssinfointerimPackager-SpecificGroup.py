@@ -13,27 +13,27 @@ import utilities
 def setStaticInfo(cfgParser, tech, vendor):
     if tech == 'GSM' and vendor == 'ERICSSON':
         cfgParser.set( 'checklist_' + vendor, 'Num', 1 )
-        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_ERIC_GSMCELL.txt' )
+        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_ERIC_GSMCELL.csv' )
         cfgParser.set( 'filelist_' + vendor, 'Num', 2 )
-        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_ERIC_GSMCELL.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_ERIC_2G_NB.txt' )
+        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_ERIC_GSMCELL.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_ERIC_2G_NB.csv' )
     
     if tech == 'GSM' and vendor == 'NORTEL':
         cfgParser.set( 'checklist_' + vendor, 'Num', 1 )
-        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_NORTEL_GSMCELL.txt' )
+        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_NORTEL_GSMCELL.csv' )
         cfgParser.set( 'filelist_' + vendor, 'Num', 2 )
-        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_NORTEL_GSMCELL.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_NORTEL_2G_NB.txt' )
+        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_NORTEL_GSMCELL.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_NORTEL_2G_NB.csv' )
     
     if tech == 'GSM' and vendor == 'NOKIA':
         cfgParser.set( 'checklist_' + vendor, 'Num', 1 )
-        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_NOKIA_GSMCELL.txt' )
+        cfgParser.set( 'checklist_' + vendor, 'File1', 'GSM_PARAM_NOKIA_GSMCELL.csv' )
         cfgParser.set( 'filelist_' + vendor, 'Num', 5 )
-        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_NOKIA_2G_NB.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_NOKIA_3G_NB.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File3', 'GSM_PARAM_NOKIA_GSMCELL.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File4', 'STG_GSM_PARAM_NOKIA_GSMCELL_TCH.txt' )
-        cfgParser.set( 'filelist_' + vendor, 'File5', 'STG_GSM_PARAM_NOKIA_GSMCELL_TRX.txt' )
+        cfgParser.set( 'filelist_' + vendor, 'File1', 'GSM_PARAM_NOKIA_2G_NB.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File2', 'GSM_PARAM_NOKIA_3G_NB.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File3', 'GSM_PARAM_NOKIA_GSMCELL.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File4', 'STG_GSM_PARAM_NOKIA_GSMCELL_TCH.csv' )
+        cfgParser.set( 'filelist_' + vendor, 'File5', 'STG_GSM_PARAM_NOKIA_GSMCELL_TRX.csv' )
     
     if tech == 'UMTS' and vendor == 'ERICSSON':
         cfgParser.set( 'checklist_' + vendor, 'Num', 2 )
