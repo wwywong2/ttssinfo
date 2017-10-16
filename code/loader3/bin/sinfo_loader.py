@@ -417,9 +417,10 @@ CALL \`%s\`.\`delete_data_%s\`('%s');" % (dbname, curr_tech_lower, dbname)
 		
 		mysqlexec_stmt = "source %s;" % (atollsqlOut)
 		mysqlexec = "mysql -h \"%s\" -P %d -u %s -p%s %s -t -vvv -e \"%s\" > \"%s\" 2>&1" % (
-			hostname, port, username, pwd, 'sinfo_atoll', mysqlexec_stmt, atollsqlLog)
-		#	hostname, port, username, pwd, dbname, mysqlexec_stmt, atollsqlLog)
+		#	hostname, port, username, pwd, 'sinfo_atoll', mysqlexec_stmt, atollsqlLog)
+			hostname, port, username, pwd, dbname, mysqlexec_stmt, atollsqlLog)
 		# now insert atoll to centralized db for better cell recovery (one big national atoll db)
+		# note: in above, dbname is still being pass for DAS insertion; atoll insertion is hardcode to be directed to schema 'sinfo_atoll' inside the template
 		print "[%s] Inserting site data...\n%s\n" % (
 			time.strftime("%Y-%m-%d %H:%M:%S"), mysqlexec)
 		sys.stdout.flush() # flush buffer before executing next line	
@@ -442,6 +443,7 @@ SET tx_isolation = 'READ-COMMITTED'; CALL load_data_%s_%s_atoll();" % (curr_tech
 			hostname, port, username, pwd, 'sinfo_atoll', mysqlexec_stmt, atollprocLog)
 		#	hostname, port, username, pwd, dbname, mysqlexec_stmt, atollprocLog)
 		# now insert atoll to centralized db for better cell recovery (one big national atoll db)
+		# note: in above, dbname is being hardcode to schema 'sinfo_atoll' because proc will only be working on the atoll part in centralized db. DAS is not touched so it does not need dbname to be passed
 		print "[%s] Calling procedure for site data...\n%s\n" % (
 			time.strftime("%Y-%m-%d %H:%M:%S"), mysqlexec)
 		sys.stdout.flush() # flush buffer before executing next line
